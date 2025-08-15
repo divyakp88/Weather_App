@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
+		
+		<title>Weather App</title>
+
+		<!-- Loading third party fonts -->
+		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+		<link href="{% static 'fonts/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+
+		<!-- Loading main css file -->
+		<link rel="stylesheet" href="{% static 'style.css' %}">
+		
+		<!--[if lt IE 9]>
+		<script src="js/ie-support/html5.js"></script>
+		<script src="js/ie-support/respond.js"></script>
+		<![endif]-->
+
+	</head>
+
+
+    
+<body>
+		
+		<!--<div class="site-content"> -->
+			<div class="site-header">
+				<div class="container">
+					<a href="index.html" class="branding">
+						<img src="{% static 'images/logo.png' %}" alt="" class="logo">
+						<div class="logo-type">
+							<h1 class="site-title">Weather APP</h1>
+							<small class="site-description">U can check weather here....</small>
+						</div>
+					</a>
+
+					<!-- Default snippet for navigation -->
+					
+
+					<div class="mobile-navigation"></div>
+
+				</div>
+			</div> <!-- .site-header -->
+        <div class="site-content bg-section">
+			<div class="hero" data-bg-image="{% static 'images/bg.jpg' %}">
+				<div class="container">
+					<form method="post" class="find-location">
+						{% csrf_token %}
+						<input type="text" list="cities" placeholder="Enter your city" name="city" required>
+						<datalist id="cities">
+							<option value="Bangalore">
+                            <option value="Mumbai">
+							<option value="Chennai">
+							<option value="Kolkata">
+							<option value="Delhi">
+							<option value="Hyderabad">
+							<option value="Kochi">
+							<option value="Pune">
+							<option value="Ahmedabad">
+							<option value="USA">
+							<option value="Jaipur">		
+							<option value="Lucknow">
+								<option value="Kanpur">
+								<option value="Nagpur">
+								<option value="Visakhapatnam">
+								<option value="Indore">
+								<option value="Thane">
+								<option value="Bhopal">
+								<option value="Patna">
+								<option value="Vadodara">
+								<option value="Ghaziabad">
+								<option value="Ludhiana">
+								<option value="Agra">
+								<option value="Nashik">
+								<option value="Faridabad">
+								<option value="Meerut">
+								<option value="Rajkot">
+								<option value="Kalyan">
+								<option value="Vasai-Virar">
+								<option value="Varanasi">
+								<option value="Srinagar">
+								<option value="Aurangabad">
+								<option value="Dhanbad">
+								<option value="Amritsar">
+								<option value="Allahabad">
+								<option value="Ranchi">
+								<option value="Howrah">
+								<option value="Coimbatore">
+								<option value="Jabalpur">
+								<option value="Gwalior">
+								<option value="Vijayawada">		
+								<option value="India">
+									<option value="United States">
+									<option value="United Kingdom">
+									<option value="Canada">
+									<option value="Australia">
+									<option value="Germany">
+									<option value="France">
+									<option value="Italy">
+									<option value="Brazil">
+									<option value="Russia">
+									<option value="China">
+									<option value="Japan">
+									<option value="South Korea">
+									<option value="Singapore">
+									<option value="New Zealand">
+									<option value="South Africa">
+									<option value="Mexico">
+									<option value="Argentina">
+									<option value="Spain">
+									<option value="Portugal">
+									<option value="Netherlands">
+									<option value="Switzerland">
+									<option value="Norway">
+									<option value="Sweden">
+									<option value="Denmark">
+									<option value="Finland">
+									<option value="Greece">
+									<option value="Poland">
+									<option value="Ukraine">
+									<option value="Bangladesh">
+									<option value="Pakistan">
+									<option value="Sri Lanka">
+									<option value="Nepal">
+									<option value="Bhutan">
+									<option value="Thailand">
+									<option value="Malaysia">
+									<option value="Indonesia">
+									<option value="Philippines">
+									<option value="Vietnam">
+									<option value="Turkey">
+									<option value="Iran">
+									<option value="Iraq">
+									<option value="Saudi Arabia">
+									<option value="UAE">
+									<option value="Qatar">
+									<option value="Kuwait">
+									<option value="Israel">
+		
+						</datalist>
+						<button type="submit">Get Weather</button>
+					</form>
+
+				</div>
+			</div>
+			{% if data %}
+			<div class="forecast-table">
+				<div class="container">
+					<div class="forecast-container">
+						<div class="today forecast">
+							<div class="forecast-header">
+								<div class="day">{{current_day}}</div>
+								<div class="date">{{current_date}}</div>
+								<div>{{current_time}}</div>
+							</div> <!-- .forecast-header -->
+							<div class="forecast-content">
+								<div class="location">{{data.city}}</div>
+								<div class="degree">
+									<div class="num">{{data.temperature}}<sup>o</sup>C</div>
+									<div class="forecast-icon">
+										<img src="{% static 'images/icons/icon-1.svg' %}" alt="" width=90>
+									</div>	
+								</div>
+								
+								<span><img src="{% static 'images/icon-wind.png' %}" alt="">{{data.wind_speed}}km/hr</span>
+								
+							</div>
+						</div>
+						<div class="forecast">
+							<div class="forecast-header">
+								<div class="day">Other Details....</div>
+							</div> <!-- .forecast-header -->
+							<div class="forecast-content">
+								<div class="forecast-icon">
+									<img src="{% static 'images/icons/icon-3.svg' %}" alt="" width=48>
+								</div>
+								<div class="degree"> 
+									<strong>Weather:</strong> {{data.description}}<br>
+                                    <strong>💧 Humidity</strong>{{data.humidity}}%<br>
+                                    <strong>🌡️ MInium Temperature:</strong>{{data.temperature_min}}<br>
+                                    <strong>🔥 Maximum Temperature:</strong>{{data.temperature_max}}<br>
+									<strong>Sea Level:</strong>{{data.sea_level}}<br>
+									<strong>Coordinates</strong><br><br>
+                                    <strong>Latitude:</strong>{{data.coordinates.lattitude}}<br>
+                                    <strong>Longitude:</strong>{{data.coordinates.longitude}}<br>
+								</div>
+								
+							</div>
+						</div>
+								
+						
+						
+						
+					</div>
+				</div>
+		</div>
+        {% elif error %}
+		<div class="custom-error">
+        <h1>{{ error }}</h1></div>
+		{% endif %}		
+		<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+		<script src="{% static 'js/plugins.js' %}"></script>
+		<script src="{% static 'js/app.js' %}"></script>
+	</div>
+	</body>
+
+</html>
