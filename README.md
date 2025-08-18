@@ -50,7 +50,7 @@ A web-based weather application built with Django and Django REST Framework that
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/your-username/weather_app.git
+git clone https://github.com/divyakp88/Weather_App.git
 cd weather_app
 ```
 2. **Create a virtual environment & activate it:**
