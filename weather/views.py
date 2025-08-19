@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
+from decouple import config
 class WeatherView(APIView):
     def get(self,request,city):
         api_key='66456c4f379fdcebb886750aeecb34f8'
@@ -47,7 +48,8 @@ def index(request):
         current_date=now.strftime("%#d%b")
         current_time=now.strftime("%I:%M%p")
         city=request.POST.get('city')
-        api_url=f'http://127.0.0.1:8000/api/weather/{city}/'
+        base_url=config('BASE_URL',default='http://127.0.0.1:8000')
+        api_url=f'{base_url}/api/weather/{city}/'
         response=requests.get(api_url)
         if response.status_code==200:
             data=response.json()
