@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import requests
+from requests.exceptions import RequestException
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,27 +15,29 @@ class WeatherView(APIView):
             'appid':api_key,
             'units':'metric'
         }
-        response=requests.get(base_url,params=params)
-        if response.status_code==200:
-            data=response.json()
-            result={
-                'city':data['name'],
-                'temperature':data['main']['temp'],
-                'description':data['weather'][0]['description'],
-                'humidity':data['main']['humidity'],
-                'coordinates':{
-                    'longitude':data['coord']['lon'],
-                    'lattitude':data['coord']['lat']
-                },
-                'temperature_min':data['main']['temp_min'],
-                'temperature_max':data['main']['temp_max'],
-                'sea_level':data['main'].get('sea_level','N/A'),
-                'wind_speed':data['wind']['speed']
-            }   
-            return Response(result)     
-        else:
-            return Response({'error':'City Not Found'},status=status.HTTP_404_NOT_FOUND)
-
+        try:
+            response=requests.get(base_url,params=params,timeout=10)
+            if response.status_code==200:
+                data=response.json()
+                result={
+                    'city':data['name'],
+                    'temperature':data['main']['temp'],
+                    'description':data['weather'][0]['description'],
+                    'humidity':data['main']['humidity'],
+                    'coordinates':{
+                        'longitude':data['coord']['lon'],
+                        'lattitude':data['coord']['lat']
+                    },
+                    'temperature_min':data['main']['temp_min'],
+                    'temperature_max':data['main']['temp_max'],
+                    'sea_level':data['main'].get('sea_level','N/A'),
+                    'wind_speed':data['wind']['speed']
+                }   
+                return Response(result)     
+            else:
+                return Response({'error':'City Not Found'},status=status.HTTP_404_NOT_FOUND)
+        except RequestException as e:
+            return response({'error':'Weather API request Failed','details':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # front end view
 def index(request):
     data=None
