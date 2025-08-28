@@ -11,10 +11,10 @@ logger=logging.getLogger(__name__)
 
 
 class WeatherView(APIView):
-    print("weather view called")
+    logger.debug("Weather view called")
     def get(self,request,city):
         api_key=config("OPENWEATHER_API_KEY")
-        print(api_key)
+        
         base_url=config("BASE_URL1")
         params={
             'q':city,
@@ -23,6 +23,7 @@ class WeatherView(APIView):
         }
         try:
             response=requests.get(base_url,params=params,timeout=10)
+            response.raise_for_status()
             if response.status_code==200:
                 data=response.json()
                 result={
@@ -42,6 +43,9 @@ class WeatherView(APIView):
                 return Response(result)     
             else:
                 return Response({'error':'City Not Found'},status=status.HTTP_404_NOT_FOUND)
+        except requests.Timeout:
+            logger.error("Weather API request time out")  
+            return Response({'error':'Request Time out'},status=504)  
         except RequestException as e:
             return Response({'error':'Weather API request Failed','details':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # front end view
