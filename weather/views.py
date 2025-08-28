@@ -63,11 +63,17 @@ def index(request):
         city=request.POST.get('city')
         base_url=config('BASE_URL',default='http://127.0.0.1:8000')
         api_url=f'{base_url}/api/weather/{city}/'
-        response=requests.get(api_url)
-        if response.status_code==200:
-            data=response.json()
-        else:
-            error='City Not Found'
+        try:
+            response=requests.get(api_url,timeout=5)
+            response.raise_for_status()
+            if response.status_code==200:
+                data=response.json()
+            else:
+                error='City Not Found'
+        except requests.Timeout:
+            error = "Weather API took too long to respond"
+        except requests.RequestException as e:
+            error = f"Failed to fetch weather data: {e}"
     return render(request,'index.html',{'data':data,'error':error,'current_day':current_day,'current_date':current_date,'current_time':current_time})        
 
 
