@@ -6,15 +6,22 @@ from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
 from decouple import config
+import logging
+logger=logging.getLogger(__name__)
+
+
 class WeatherView(APIView):
+    print("weather view called")
     def get(self,request,city):
-        api_key='66456c4f379fdcebb886750aeecb34f8'
-        base_url='https://api.openweathermap.org/data/2.5/weather'
+        api_key=config("OPENWEATHER_API_KEY")
+        print(api_key)
+        base_url=config("BASE_URL1")
         params={
             'q':city,
             'appid':api_key,
             'units':'metric'
         }
+
         try:
             response=requests.get(base_url,params=params,timeout=10)
             if response.status_code==200:
@@ -37,7 +44,7 @@ class WeatherView(APIView):
             else:
                 return Response({'error':'City Not Found'},status=status.HTTP_404_NOT_FOUND)
         except RequestException as e:
-            return response({'error':'Weather API request Failed','details':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error':'Weather API request Failed','details':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 # front end view
 def index(request):
     data=None
