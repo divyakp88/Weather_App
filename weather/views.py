@@ -21,7 +21,6 @@ class WeatherView(APIView):
             'appid':api_key,
             'units':'metric'
         }
-
         try:
             response=requests.get(base_url,params=params,timeout=10)
             if response.status_code==200:
