@@ -64,7 +64,7 @@ def index(request):
         base_url=config('BASE_URL',default='http://127.0.0.1:8000')
         api_url=f'{base_url}/api/weather/{city}/'
         try:
-            response=requests.get(api_url,timeout=5)
+            response=requests.get(api_url,timeout=10)
             response.raise_for_status()
             if response.status_code==200:
                 data=response.json()
